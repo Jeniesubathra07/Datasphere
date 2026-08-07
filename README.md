@@ -29,7 +29,15 @@ Add your CSV files to `datasets/raw/` (for example `student_education_risk.csv`)
 
 Expected scale from project spec: ~200K students, ~47 features, 4 risk levels.
 
-## Notebook
+## Notebooks
+
+Primary worked notebook (EDA, cleaning, feature engineering, XGBoost, SHAP):
+
+```bash
+jupyter notebook notebooks/datasphere.ipynb
+```
+
+Scaffold pipeline notebook:
 
 ```bash
 jupyter notebook notebooks/education_risk_pipeline.ipynb

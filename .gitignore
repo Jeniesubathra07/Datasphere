@@ -7,3 +7,4 @@ __pycache__/
 models/*.joblib
 datasets/raw/*.csv
 !datasets/raw/.gitkeep
+datasets/processed/*.csv
