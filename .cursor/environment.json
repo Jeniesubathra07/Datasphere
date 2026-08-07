@@ -1,0 +1,18 @@
+{
+  "name": "Datasphere",
+  "user": "ubuntu",
+  "install": "bash .cursor/scripts/install.sh",
+  "ports": [
+    {
+      "name": "api",
+      "port": 8000
+    }
+  ],
+  "terminals": [
+    {
+      "name": "api",
+      "command": "python3 -m uvicorn datasphere.app:app --host 0.0.0.0 --port 8000 --reload",
+      "description": "FastAPI development server for Datasphere"
+    }
+  ]
+}
