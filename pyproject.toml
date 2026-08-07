@@ -1,17 +1,26 @@
 [project]
 name = "datasphere"
-version = "0.1.0"
-description = "Datasphere development API"
+version = "0.2.0"
+description = "Child Education Risk Intelligence Platform"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.32.0",
+    "pandas>=2.2.0",
+    "numpy>=2.0.0",
+    "scikit-learn>=1.5.0",
+    "xgboost>=2.1.0",
+    "shap>=0.46.0",
+    "pandera>=0.20.0",
+    "joblib>=1.4.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "httpx>=0.27.0",
     "pytest>=8.0.0",
+    "jupyter>=1.1.0",
+    "ipykernel>=6.29.0",
 ]
 
 [build-system]
