@@ -15,7 +15,7 @@ def _column(df: pd.DataFrame, *names: str) -> pd.Series | None:
 
 
 def construct_risk_label(df: pd.DataFrame) -> pd.Series:
-    existing = _column(df, "risk_level", "risk", "dropout_risk")
+    existing = _column(df, "dropout_risk_level", "risk_level", "risk", "dropout_risk")
     if existing is not None:
         return existing.astype(str).str.title().replace(
             {

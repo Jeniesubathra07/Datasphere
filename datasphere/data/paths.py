@@ -7,6 +7,7 @@ PROCESSED_DIR = DATASETS_DIR / "processed"
 MODELS_DIR = REPO_ROOT / "models"
 
 PRIMARY_CANDIDATES = (
+    "child_education_risk_intelligence.csv",
     "student_education_risk.csv",
     "education_risk_dataset.csv",
     "students.csv",

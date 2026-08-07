@@ -5,3 +5,5 @@ __pycache__/
 .venv/
 .env
 models/*.joblib
+datasets/raw/*.csv
+!datasets/raw/.gitkeep
