@@ -9,6 +9,7 @@ Push your worked dataset and notebook artifacts to this folder:
 | File | Description |
 | --- | --- |
 | `raw/student_education_risk.csv` | Main dataset (~200K students, ~47 features) |
+| `raw/student_education_risk.zip` | Zipped CSV (auto-extracted on load) |
 | `raw/*.csv` | Any additional source tables |
 
 ## Feature domains (from project spec)
