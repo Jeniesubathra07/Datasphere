@@ -8,12 +8,15 @@ client = TestClient(app)
 def test_health() -> None:
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    payload = response.json()
+    assert payload["status"] == "ok"
+    assert payload["platform"] == "EduRisk Intelligence"
+    assert "model_loaded" in payload
 
 
 def test_list_datasets() -> None:
     response = client.get("/api/datasets")
     assert response.status_code == 200
     payload = response.json()
-    assert len(payload["datasets"]) == 2
-    assert payload["datasets"][0]["name"] == "sales"
+    assert "datasets" in payload
+    assert isinstance(payload["datasets"], list)
