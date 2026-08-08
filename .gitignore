@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 .venv/
 .env
+models/*.joblib
+datasets/raw/*.csv
+!datasets/raw/.gitkeep
+datasets/processed/*.csv
