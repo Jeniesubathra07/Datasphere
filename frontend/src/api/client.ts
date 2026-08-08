@@ -17,7 +17,11 @@ export async function predictRisk(student: StudentInput, explain = true): Promis
   return data
 }
 
-export async function checkHealth(): Promise<{ status: string; model_loaded: boolean }> {
+export async function checkHealth(): Promise<{
+  status: string
+  model_loaded: boolean
+  model_load_error?: string
+}> {
   const { data } = await api.get('/health')
   return data
 }

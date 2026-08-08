@@ -73,20 +73,27 @@ cp .env.example .env
 
 ## Running locally
 
-### Terminal 1 — Backend (port 8000)
+### Terminal 1 — Backend (port 8080 recommended on Windows)
 
 ```bash
-python -m uvicorn datasphere.app:app --host 127.0.0.1 --port 8000 --reload
+python scripts/run_stage2_pipeline.py   # creates models/education_risk_pipeline.joblib
+python -m uvicorn datasphere.app:app --host 127.0.0.1 --port 8080 --reload
 ```
+
+If port 8080 is busy, use another port (e.g. 8000) and set the same value in `frontend/.env`.
 
 ### Terminal 2 — Frontend (port 5173)
 
 ```bash
 cd frontend
+npm install
+cp .env.example .env
 npm run dev
 ```
 
 Open http://localhost:5173
+
+The Vite dev server proxies API calls to `http://127.0.0.1:8080` by default. Set `VITE_API_BASE_URL` in `frontend/.env` if your backend uses a different port.
 
 ## API endpoints
 

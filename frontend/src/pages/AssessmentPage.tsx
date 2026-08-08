@@ -26,7 +26,12 @@ export default function AssessmentPage() {
       try {
         const health = await checkHealth()
         if (!health.model_loaded) {
-          setBootError('ML model is not loaded on the server. Run the Stage 2 training pipeline first.')
+          const detail = health.model_load_error
+          setBootError(
+            detail
+              ? `ML model failed to load: ${detail}`
+              : 'ML model is not loaded. Run: python scripts\\run_stage2_pipeline.py',
+          )
           return
         }
         const loadedSchema = await fetchModelSchema()

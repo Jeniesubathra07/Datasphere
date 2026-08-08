@@ -37,6 +37,7 @@ class HealthResponse(BaseModel):
     platform: str
     model_loaded: bool
     model_version: str | None = None
+    model_load_error: str | None = None
 
 
 class ErrorResponse(BaseModel):
