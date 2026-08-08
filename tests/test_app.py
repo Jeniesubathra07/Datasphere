@@ -11,6 +11,7 @@ def test_health() -> None:
     payload = response.json()
     assert payload["status"] == "ok"
     assert payload["platform"] == "EduRisk Intelligence"
+    assert "model_loaded" in payload
 
 
 def test_list_datasets() -> None:

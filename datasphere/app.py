@@ -1,35 +1,56 @@
-from fastapi import FastAPI, HTTPException
+"""FastAPI application factory."""
 
-from datasphere.data.loader import discover_datasets, load_primary_dataset
-from datasphere.ml.train import train_model
+from __future__ import annotations
 
-app = FastAPI(
-    title="EduRisk Intelligence",
-    version="0.2.0",
-    description="Child Education Risk Intelligence Platform API",
-)
+from contextlib import asynccontextmanager
 
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok", "platform": "EduRisk Intelligence"}
+from datasphere.api.routes import health, model, predict
+from datasphere.core.config import APP_VERSION, CORS_ORIGINS, MODELS_PATH
+from datasphere.core.model_loader import ModelLoadError, load_production_model
 
 
-@app.get("/api/datasets")
-def list_datasets() -> dict[str, object]:
-    datasets = discover_datasets()
-    if not datasets:
-        return {
-            "datasets": [],
-            "message": "No CSV files found. Add datasets under datasets/raw/ on GitHub.",
-        }
-    return {"datasets": datasets}
-
-
-@app.post("/api/model/train")
-def train_risk_model() -> dict[str, object]:
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     try:
-        frame = load_primary_dataset()
-    except FileNotFoundError as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
-    return train_model(frame)
+        app.state.loaded_model = load_production_model(MODELS_PATH)
+    except ModelLoadError as exc:
+        app.state.loaded_model = None
+        app.state.model_load_error = str(exc)
+    yield
+
+
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title="EduRisk Intelligence",
+        version=APP_VERSION,
+        description="Child Education Risk Intelligence Platform API",
+        lifespan=lifespan,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(health.router)
+    app.include_router(predict.router)
+    app.include_router(model.router)
+
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An internal server error occurred."},
+        )
+
+    return app
+
+
+app = create_app()

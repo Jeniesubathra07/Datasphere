@@ -42,6 +42,14 @@ def _categorical_columns(frame: pd.DataFrame, numeric: list[str], boolean: list[
     return [col for col in frame.columns if col not in excluded]
 
 
+def extract_features_for_prediction(df: pd.DataFrame) -> pd.DataFrame:
+    """Return model features without requiring the target column."""
+    drop_cols = [col for col in EXCLUDED_FEATURE_COLUMNS if col in df.columns]
+    features = df.drop(columns=drop_cols, errors="ignore")
+    assert_no_leakage_columns(features.columns.tolist())
+    return features
+
+
 def split_features_target(df: pd.DataFrame, target_col: str = TARGET_COLUMN) -> tuple[pd.DataFrame, pd.Series]:
     """Separate approved predictors (X) and target (y)."""
     if target_col not in df.columns:

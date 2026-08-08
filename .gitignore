@@ -9,3 +9,6 @@ models/*.json
 datasets/raw/*.csv
 !datasets/raw/.gitkeep
 datasets/processed/*.csv
+node_modules/
+frontend/node_modules/
+frontend/dist/
