@@ -1,10 +1,11 @@
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from datasphere.data.loader import discover_datasets
 from datasphere.ml.labels import construct_risk_label
-from datasphere.ml.train import train_model
+from datasphere.ml.pipeline import run_stage2_pipeline
 
 
 def test_discover_datasets_with_sample(tmp_path: Path, monkeypatch) -> None:
@@ -40,16 +41,11 @@ def test_construct_risk_label() -> None:
     assert labels.iloc[1] in {"Low", "Medium"}
 
 
-def test_train_model_on_sample() -> None:
-    df = pd.DataFrame(
-        {
-            "attendance": [50, 55, 90, 92, 40, 45, 88, 91] * 5,
-            "test_score": [30, 35, 85, 88, 25, 28, 82, 86] * 5,
-            "child_labour": ["yes", "yes", "no", "no", "yes", "yes", "no", "no"] * 5,
-            "household_income": [10000, 12000, 50000, 52000, 9000, 11000, 48000, 51000] * 5,
-            "gender": ["M", "F", "M", "F", "M", "F", "M", "F"] * 5,
-        }
-    )
-    result = train_model(df)
-    assert result["rows"] == 40
-    assert Path(result["model_path"]).exists()
+@pytest.mark.slow
+def test_train_model_on_sample(tmp_path: Path) -> None:
+    from datasphere.data.loader import load_primary_dataset
+
+    df = load_primary_dataset().sample(n=1500, random_state=42)
+    result = run_stage2_pipeline(df, models_dir=tmp_path, run_tuning=False)
+    assert result.x_shape[0] == 1500
+    assert Path(result.artifact_paths["model"]).exists()

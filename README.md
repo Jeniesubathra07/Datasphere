@@ -43,6 +43,23 @@ Scaffold pipeline notebook:
 jupyter notebook notebooks/education_risk_pipeline.ipynb
 ```
 
+## Stage 2 ML pipeline (production)
+
+Train the validated, leakage-safe pipeline:
+
+```bash
+python3 scripts/run_stage2_pipeline.py
+```
+
+Inference:
+
+```python
+from datasphere.ml.inference import predict_student_risk
+result = predict_student_risk(student_dict)
+```
+
+See `docs/STAGE2_ML_PIPELINE.md` for architecture, exclusions, and evaluation details.
+
 ## API
 
 ```bash

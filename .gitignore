@@ -5,6 +5,7 @@ __pycache__/
 .venv/
 .env
 models/*.joblib
+models/*.json
 datasets/raw/*.csv
 !datasets/raw/.gitkeep
 datasets/processed/*.csv
