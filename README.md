@@ -93,7 +93,7 @@ npm run dev
 
 Open http://localhost:5173
 
-The Vite dev server proxies API calls to `http://127.0.0.1:8080` by default. Set `VITE_API_BASE_URL` in `frontend/.env` if your backend uses a different port.
+The frontend calls the API directly at `http://127.0.0.1:8080` in dev mode (no Vite proxy required). Override with `VITE_API_BASE_URL` in `frontend/.env` if your backend uses a different port.
 
 ## API endpoints
 

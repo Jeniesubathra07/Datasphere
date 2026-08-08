@@ -5,14 +5,20 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const apiTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8080'
 
+  const proxyOptions = {
+    target: apiTarget,
+    changeOrigin: true,
+    secure: false,
+  }
+
   return {
     plugins: [react()],
     server: {
       port: 5173,
       proxy: {
-        '/health': apiTarget,
-        '/predict': apiTarget,
-        '/api': apiTarget,
+        '/health': proxyOptions,
+        '/predict': proxyOptions,
+        '/api': proxyOptions,
       },
     },
   }

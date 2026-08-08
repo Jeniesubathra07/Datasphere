@@ -1,8 +1,18 @@
 import axios from 'axios'
 import type { ModelSchema, PredictionResponse, StudentInput } from '../types/student'
 
+const DEFAULT_DEV_API_URL = 'http://127.0.0.1:8080'
+
+function resolveApiBaseUrl(): string {
+  const configured = import.meta.env.VITE_API_BASE_URL?.trim()
+  if (configured) return configured
+  // Bypass the Vite proxy in local dev — more reliable on Windows than http-proxy.
+  if (import.meta.env.DEV) return DEFAULT_DEV_API_URL
+  return ''
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: resolveApiBaseUrl(),
   headers: { 'Content-Type': 'application/json' },
 })
 
