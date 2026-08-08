@@ -4,7 +4,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Grid,
   InputLabel,
   MenuItem,
   Paper,
@@ -29,7 +28,9 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6" gutterBottom>{title}</Typography>
-      <Grid container spacing={2}>{children}</Grid>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 2 }}>
+        {children}
+      </Box>
     </Paper>
   )
 }
@@ -44,11 +45,11 @@ function Field({
   children: React.ReactNode
 }) {
   return (
-    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+    <Box>
       {children}
       {error ? <FormHelperText error>{error}</FormHelperText> : null}
       {!error ? <FormHelperText>{label}</FormHelperText> : null}
-    </Grid>
+    </Box>
   )
 }
 
@@ -65,12 +66,10 @@ export default function StudentForm({ schema, value, errors, onChange, onSubmit,
       value={value[key] as number}
       onChange={(e) => set(key, Number(e.target.value) as StudentInput[typeof key])}
       error={Boolean(errors[key])}
-      slotProps={{
-        htmlInput: {
-          min: schema.numeric_bounds[key]?.[0],
-          max: schema.numeric_bounds[key]?.[1],
-          step: key.includes('pct') || key.includes('score') ? 0.1 : 1,
-        },
+      inputProps={{
+        min: schema.numeric_bounds[key]?.[0],
+        max: schema.numeric_bounds[key]?.[1],
+        step: key.includes('pct') || key.includes('score') ? 0.1 : 1,
       }}
     />
   )
@@ -108,12 +107,12 @@ export default function StudentForm({ schema, value, errors, onChange, onSubmit,
         <Field label="Record date" error={errors.record_generated_date}>
           <TextField fullWidth type="date" value={value.record_generated_date}
             onChange={(e) => set('record_generated_date', e.target.value)}
-            slotProps={{ inputLabel: { shrink: true } }} />
+            InputLabelProps={{ shrink: true }} />
         </Field>
         <Field label="Enrollment date" error={errors.enrollment_date}>
           <TextField fullWidth type="date" value={value.enrollment_date}
             onChange={(e) => set('enrollment_date', e.target.value)}
-            slotProps={{ inputLabel: { shrink: true } }} />
+            InputLabelProps={{ shrink: true }} />
         </Field>
         <Field label="Academic year" error={errors.academic_year}>{select('academic_year')}</Field>
         <Field label="Country" error={errors.country}>{select('country')}</Field>
@@ -131,8 +130,8 @@ export default function StudentForm({ schema, value, errors, onChange, onSubmit,
         <Field label="School transfers" error={errors.number_of_school_transfers}>{num('number_of_school_transfers')}</Field>
         <Field label="Disciplinary incidents" error={errors.disciplinary_incidents_count}>{num('disciplinary_incidents_count')}</Field>
         <Field label="Report source" error={errors.report_source}>{select('report_source')}</Field>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('previous_year_pass')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('extracurricular_participation')}</Grid>
+        <Box>{flag('previous_year_pass')}</Box>
+        <Box>{flag('extracurricular_participation')}</Box>
       </Section>
 
       <Section title="3. Attendance & Performance">
@@ -146,13 +145,13 @@ export default function StudentForm({ schema, value, errors, onChange, onSubmit,
         <Field label="Father education" error={errors.father_education_level}>{select('father_education_level')}</Field>
         <Field label="Family size" error={errors.family_size}>{num('family_size')}</Field>
         <Field label="Number of siblings" error={errors.number_of_siblings}>{num('number_of_siblings')}</Field>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('is_orphan')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('single_parent_household')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('household_has_electricity')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('household_has_internet_access')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('owns_smartphone_or_computer')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('child_labor_involvement')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('seasonal_migration_family')}</Grid>
+        <Box>{flag('is_orphan')}</Box>
+        <Box>{flag('single_parent_household')}</Box>
+        <Box>{flag('household_has_electricity')}</Box>
+        <Box>{flag('household_has_internet_access')}</Box>
+        <Box>{flag('owns_smartphone_or_computer')}</Box>
+        <Box>{flag('child_labor_involvement')}</Box>
+        <Box>{flag('seasonal_migration_family')}</Box>
       </Section>
 
       <Section title="5. School Environment">
@@ -161,19 +160,19 @@ export default function StudentForm({ schema, value, errors, onChange, onSubmit,
       </Section>
 
       <Section title="6. Risk Factors">
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('bullying_incidents_reported')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('health_issues_reported')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('special_needs_status')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('early_marriage_risk_flag')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('community_conflict_zone')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('language_barrier_flag')}</Grid>
+        <Box>{flag('bullying_incidents_reported')}</Box>
+        <Box>{flag('health_issues_reported')}</Box>
+        <Box>{flag('special_needs_status')}</Box>
+        <Box>{flag('early_marriage_risk_flag')}</Box>
+        <Box>{flag('community_conflict_zone')}</Box>
+        <Box>{flag('language_barrier_flag')}</Box>
       </Section>
 
       <Section title="7. Support Factors">
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('free_meal_program_enrolled')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('scholarship_received')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('ngo_intervention_present')}</Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>{flag('literacy_program_enrolled')}</Grid>
+        <Box>{flag('free_meal_program_enrolled')}</Box>
+        <Box>{flag('scholarship_received')}</Box>
+        <Box>{flag('ngo_intervention_present')}</Box>
+        <Box>{flag('literacy_program_enrolled')}</Box>
       </Section>
 
       <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
